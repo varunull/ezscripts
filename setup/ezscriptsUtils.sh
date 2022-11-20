@@ -107,3 +107,76 @@ notifyecho(){
     fi
     colorfulEcho $newLine -c 'cyan' "$@";
 }
+
+#
+# [ezscript] Utility function to show different command usages. This
+# function uses the $FUNCTION_DESCRIPTION_FILE to fetch the usages
+# and the function info
+#
+function getAttr()
+{
+    grep -oP "(?<=<$1>).*(?=</$1>)" <<<"$2"
+}
+
+function printFunctionInfo()
+{
+    local shortInfo=0;
+    local funcDesc=0;
+    echo ""
+
+    infoecho -n "$2"
+
+    shortInfo=$(getAttr "shortInfo" "$1");
+    echo -e " : $shortInfo\n"
+
+    funcDesc=$(getAttr "desc" "$1");
+    notifyecho "Description --"
+    echo "$funcDesc"
+}
+
+function printFunctionUsage()
+{
+    if [[ -z $1 ]]; then
+        echo "[ERROR] Need a list of commands! Exiting...";
+        return;
+    fi;
+    readarray -t myA < <(echo "$1");
+    declare -p myA > /dev/null;
+    for i in "${myA[@]}";
+    do
+        echo "";
+        local cmdPurp=$(getAttr "cmdPurp" "$i");
+        local actualCommand=$(getAttr "cmd" "$i");
+        successecho "- $cmdPurp";
+        dotline;
+        warnecho "$actualCommand";
+        dotline;
+    done
+}
+
+
+function showusage()
+{
+    if [[ -z $1 ]]; then
+        errorecho "Enter the function name as the argument!";
+        return
+    fi
+
+    local completeDescription=0;
+    local usages=0;
+
+    completeDescription=$(sed -n "/<$1>/,/<\/$1>/p" $FUNCTION_DESCRIPTION_FILE);
+
+    if [[ -z $completeDescription ]]; then
+        errorecho -n "[ERROR] No usage found for the function : "; echo $1;
+        return;
+    fi
+
+    printFunctionInfo "$completeDescription" "$1"
+
+    usages=$(sed -n "/<usages/,/<\/usages>/p" <<< "$completeDescription" \
+            | sed "s#<usages>##g; s#</usages>##g;" \
+            | grep -v '^$');
+
+    printFunctionUsage "$usages"
+}

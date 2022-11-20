@@ -7,7 +7,7 @@
 #
 
 if [[ -z $EZSCRIPT_PATH ]]; then
-    errorecho "The variable EZSCRIPT_PATH is not set. Please set it to the path of the ezscript project!";
+    echo "The variable EZSCRIPT_PATH is not set. Please set it to the path of the ezscript project!";
     return 1;
 fi
 
@@ -30,7 +30,7 @@ if [[ ! -f $TEMP_ALIAS_FILE ]]; then
 fi
 
 #
-# File that stores the command usages
+# File that stores the command usages stored by the user
 # Used by functions :
 # - addcmdhelp
 # - findcmdhelp
@@ -40,3 +40,8 @@ COMMAND_HELP_FILE=${PROJECT_PATH}/database/toolcommands.txt
 if [[ ! -f $COMMAND_HELP_FILE ]]; then
     touch $COMMAND_HELP_FILE
 fi
+
+#
+# [ezscript] File that is used to retrive the usages for ezscript functions!
+#
+FUNCTION_DESCRIPTION_FILE=${PROJECT_PATH}/setup/funcDescription.txt
