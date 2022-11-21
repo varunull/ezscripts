@@ -5,11 +5,11 @@ if [[ -z $EZSCRIPT_PATH ]]; then
     return 1;
 fi
 
-source $EZSCRIPT_PATH/setup/globalVars.sh;
-
-if [[ $? -ne 0 ]]; then
-    echo "Setup Failed! Exiting...";
+if [[ ! -f $EZSCRIPT_PATH/setup/globalVars.sh ]]; then
+    echo "[ERROR] : The EZSCRIPT_PATH is incorrectly set! Please set it to the project directory";
     return 1;
+else
+    source $EZSCRIPT_PATH/setup/globalVars.sh;
 fi
 
 # Source all the files
