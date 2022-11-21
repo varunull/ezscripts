@@ -1,41 +1,70 @@
 
 <ff>
-<shortInfo>find files</shortInfo>
-<desc>This function internally used the find tool to find for files recursively in the current directory</desc>
+<shortInfo>Find a file recursively in the current directory</shortInfo>
+<desc>This function internally uses the find tool to find for a file (provided as an argument) recursively in the current directory.</desc>
 <usages>
 <cmd>ff rockyou.txt</cmd><cmdPurp>Find the file rockyou.txt recursively in all the folders of the current directory</cmdPurp>
 </usages>
 </ff>
 
 <slc>
-<shortInfo>show last commands</shortInfo>
-<desc>Utility to check the most recent usages of a particular tool. Particularly saves the manual work of parsing through the history to find the usages. The number of commands shown in the output can be controlled via the arguments.</desc>
+<shortInfo>Show the most recent usages of a command</shortInfo>
+<desc>Utility to check the most recent usages of a particular command. This saves the manual work of parsing through the history to find the recent usages. The number of commands shown in the output can be controlled via the arguments.</desc>
 <usages>
 <cmd>slc grep 3</cmd><cmdPurp>Show the latest three usages of grep command</cmdPurp>
 <cmd>slc find</cmd><cmdPurp>Show all the usages of find command that are present in the bash_history</cmdPurp>
+<cmd>slc</cmd><cmdPurp>Show the most recently used 25 commands</cmdPurp>
 </usages>
 </slc>
 
 <ffg>
-<shortInfo>find files using grep</shortInfo>
-<desc>This function creates a wildcard string using the arguments, and then the resultant string is used to search for the files recursively in the current directory</desc>
+<shortInfo>Find file recursively using grepable string created from arguments</shortInfo>
+<desc>This function creates a wildcard string using the arguments, and then the resultant string is used to search for the file recursively in the current directory</desc>
 <usages>
 <cmd>ffg lema jack</cmd><cmdPurp>Find the file names with pattern *lema*jack* recursively in the current directory</cmdPurp>
 </usages>
 </ffg>
 
-<findcmdhelp>
-<shortInfo>find command help</shortInfo>
-<desc>This function takes a tool name as the argument and lists down all the examples of usages of it. These usages were stored to and file using the related command 'addcmdhelp'</desc>
+<findcmdusage>
+<shortInfo>Find the saved usages for a command</shortInfo>
+<desc>This function takes a command name as the argument and lists down all the saved usages of it. These usages were stored to and file using the related function 'addcmdusage'</desc>
 <usages>
-<cmd>findcmdhelp nmap</cmd><cmdPurp>Find all the saved command usages for the nmap. These were saved using the addcmdhelp function</cmdPurp>
+<cmd>findcmdusage nmap</cmd><cmdPurp>Find all the saved usages for nmap command.</cmdPurp>
+<cmd>findcmdusage ls</cmd><cmdPurp>Find all the saved usages for ls command.</cmdPurp>
 </usages>
-</findcmdhelp>
+</findcmdusage>
 
-<addcmdhelp>
-<shortInfo>add command help</shortInfo>
-<desc>This function is used to save the commands for different tools that we use frequently. It takes the tool name and the corresponding command as the argument, which can then be quickly retrieved using 'findcmdhelp' command.</desc>
+<addcmdusage>
+<shortInfo>Add a usage for a command, which can be retrieved later</shortInfo>
+<desc>This function is used to save command lines for different tools that we use frequently. It takes the tool name and its corresponding command as the argument, which can then be quickly retrieved using 'findcmdusage' function.</desc>
 <usages>
-<cmd>addcmdhelp nmap 'sudo nmap -sV --version-all 10.10.102.93'</cmd><cmdPurp>Add this command usage for nmap which can later be retrieved by the 'findcmdhelp' command.</cmdPurp>
+<cmd>addcmdusage nmap 'sudo nmap -sV --version-all 10.10.102.93'</cmd><cmdPurp>Add this usage for nmap command which can later be retrieved by running 'findcmdusage nmap'.</cmdPurp>
+<cmd>addcmdusage ls 'ls -lR'</cmd><cmdPurp>Add this usage for ls command which can later be retrieved by running 'findcmdusage ls'.</cmdPurp>
 </usages>
-</addcmdhelp>
+</addcmdusage>
+
+<ctoarray>
+<shortInfo>Convert command output to an array</shortInfo>
+<desc>This function is used to convert the output of any command into an array which can be later used to perform different operations. The user simply needs to loop through the array and do operations on each element that is part of it. For example, inputting the command `find . -name "*.txt"` to the function will create an array of all *.txt files.</desc>
+<usages>
+<cmd>ctoarray</cmd><cmdPurp>To use this function.</cmdPurp>
+</usages>
+</ctoarray>
+
+<tohex>
+<shortInfo>Convert the argument into hex value</shortInfo>
+<desc>Convert the argument into its corresponding hex value.</desc>
+<usages>
+<cmd>tohex 16545</cmd><cmdPurp>Convert decimal number 16545 to its corresponding hex value.</cmdPurp>
+</usages>
+</tohex>
+
+<toascii>
+<shortInfo>Convert the argument to its ascii value</shortInfo>
+<desc>Convert the argument into its corresponding ascii value. For ascii tables, you can refer : https://www.eso.org/~ndelmott/ascii.html. The values are displayed in hex and decimal format.</desc>
+<usages>
+<cmd></cmd><cmdPurp>Convert the argument into its corresponding ascii value. For ascii tables, you can referhttps://www.eso.org/~ndelmott/ascii.html. The values are displayed in hex and decimal format.</cmdPurp>
+<cmd>toascii %</cmd><cmdPurp>Convert '%' to its ascii value</cmdPurp>
+<cmd>toascii A</cmd><cmdPurp>Convert 'A' to its ascii value</cmdPurp>
+</usages>
+</toascii>

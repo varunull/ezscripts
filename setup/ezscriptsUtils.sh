@@ -59,7 +59,7 @@ colorfulEcho () {
 }
 
 # Echo used to issue warnings
-warnecho(){
+yellowecho(){
     local newLine=0;
     if [[ $1 == '-n' ]]; then
         newLine=$1;
@@ -69,7 +69,7 @@ warnecho(){
 }
 
 # Echo used to issue errors
-errorecho(){
+redecho(){
     local newLine=0;
     if [[ $1 == '-n' ]]; then
         newLine=$1;
@@ -79,7 +79,7 @@ errorecho(){
 }
 
 # Echo used to display information
-infoecho(){
+blueecho(){
     local newLine=0;
     if [[ $1 == '-n' ]]; then
         newLine=$1;
@@ -89,7 +89,7 @@ infoecho(){
 }
 
 # Echo used to show successful commands
-successecho(){
+greenecho(){
     local newLine=0;
     if [[ $1 == '-n' ]]; then
         newLine=$1;
@@ -99,7 +99,7 @@ successecho(){
 }
 
 # Echo used to notify regarding ongoing operations
-notifyecho(){
+cyanecho(){
     local newLine=0;
     if [[ $1 == '-n' ]]; then
         newLine=$1;
@@ -124,13 +124,13 @@ function printFunctionInfo()
     local funcDesc=0;
     echo ""
 
-    infoecho -n "$2"
+    blueecho -n "$2"
 
     shortInfo=$(getAttr "shortInfo" "$1");
     echo -e " : $shortInfo\n"
 
     funcDesc=$(getAttr "desc" "$1");
-    notifyecho "Description --"
+    cyanecho "Description --"
     echo "$funcDesc"
 }
 
@@ -147,9 +147,9 @@ function printFunctionUsage()
         echo "";
         local cmdPurp=$(getAttr "cmdPurp" "$i");
         local actualCommand=$(getAttr "cmd" "$i");
-        successecho "- $cmdPurp";
+        greenecho "- $cmdPurp";
         dotline;
-        warnecho "$actualCommand";
+        yellowecho "$actualCommand";
         dotline;
     done
 }
@@ -158,7 +158,7 @@ function printFunctionUsage()
 function showusage()
 {
     if [[ -z $1 ]]; then
-        errorecho "Enter the function name as the argument!";
+        redecho "Enter the function name as the argument!";
         return
     fi
 
@@ -168,7 +168,7 @@ function showusage()
     completeDescription=$(sed -n "/<$1>/,/<\/$1>/p" $FUNCTION_DESCRIPTION_FILE);
 
     if [[ -z $completeDescription ]]; then
-        errorecho -n "[ERROR] No usage found for the function : "; echo $1;
+        redecho -n "[ERROR] No usage found for the function : "; echo $1;
         return;
     fi
 
@@ -180,3 +180,58 @@ function showusage()
 
     printFunctionUsage "$usages"
 }
+##################################################33
+
+#
+# [ezscript] Utility function to show currently supported functions. This
+# function uses the $FUNCTION_DESCRIPTION_FILE to fetch the functions
+# and their info
+#
+function printInBanner() {
+    msg="# $* #"
+    edge=$(echo "$msg" | sed 's/./#/g')
+    echo -e "\n$edge"
+    yellowecho "$msg"
+    echo "$edge"
+}
+
+function printFunctionInfoOneliner ()
+{
+    local shortInfo=0;
+    local funcDesc=0;
+    local shortInfo=$(getAttr "shortInfo" "$1");
+    local format=" %-39s | %-80s | %-50s\n"
+    printf "$format" `blueecho -n "$2"` "$shortInfo" "`greenecho -n 'showusage'` $2"
+}
+
+
+function showfunclist()
+{
+    # Print the header
+    printInBanner "Currently supported functions"
+    local header="\n %-20s %19s %90s\n";
+    printf "$header" "Function Name" "Description" "Show Detailed Usage";
+    dotline 160;
+
+    # Fetch the currently added function usages.
+    local funclist=0;
+    funclist=$(grep --color -B 1 '<shortInfo>' $FUNCTION_DESCRIPTION_FILE | grep "^<[^>]*>$" | sed "s#<##g; s#>##g");
+    readarray -t myB < <(echo "$funclist");
+    declare -p myB > /dev/null;
+
+    # Loop through each function and display its description
+    for i in "${myB[@]}"; do
+        local completeDescription=0;
+        local usages=0;
+        completeDescription=$(sed -n "/<$i>/,/<\/$i>/p" $FUNCTION_DESCRIPTION_FILE);
+        if [[ -z $completeDescription ]]; then
+            redecho -n "[ERROR] No usage found for the function : ";
+            echo $1;
+            return;
+        fi;
+        printFunctionInfoOneliner "$completeDescription" "$i";
+    done
+    dotline 160;
+    echo ""
+}
+#########################################################

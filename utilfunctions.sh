@@ -10,7 +10,12 @@
 # Function that displays dotline
 function dotline()
 {
-   echo -e "------------------------------------------------------------------------------------------------";
+    if [[ -z $1 ]]; then
+        echo -e "------------------------------------------------------------------------------------------------";
+    else
+        printf -- "-%.0s" $(seq 1 $1);
+        echo ""
+    fi
 }
 
 
@@ -99,7 +104,7 @@ function ffg()
 function mgrep()
 {
     if [[ -z $1 ]]; then
-        errorecho "Need an argument to grep!";
+        redecho "Need an argument to grep!";
         return;
     fi
 
@@ -118,7 +123,7 @@ function slc()
     if [[ -z $1 ]]; then
         echo "Showing the last 25 commands...";
         cmdList=$(history | cut -c 8- | grep -v -E 'history|slc' | tail -n25);
-        warnecho "$cmdList"
+        yellowecho "$cmdList"
         return;
     else
         cmdname=$1;
@@ -133,11 +138,11 @@ function slc()
     cmdList=$(history | grep -v -E 'history|slc' | cut -c 8- | grep ^$cmdname | tail -n$count);
 
     if [[ -z $cmdList ]]; then
-        errorecho "No previously used commands found for : $cmdname";
+        redecho "No previously used commands found for : $cmdname";
         return 1;
     fi
 
-    warnecho "$cmdList"
+    yellowecho "$cmdList"
 
 }
 
@@ -147,7 +152,7 @@ function addtemppath()
         alias "$1"="$2"
         echo "alias $1='$2'" >> $TEMP_ALIAS_FILE
 
-        successecho "[++] Alias added : $1"
+        greenecho "[++] Alias added : $1"
 }
 
 # Function that converts the given argument to ascii
@@ -175,7 +180,7 @@ function todec(){
  done
 }
 
-# Utility function that is internally used by findcmdhelp function.
+# Utility function that is internally used by findcmdusage function.
 function printCommands()
 {
   if [[ -z $1 ]]; then
@@ -189,9 +194,9 @@ function printCommands()
   local counter=1;
   for i in "${myA[@]}"; do
     echo ""
-    successecho "Usage #$counter";
+    greenecho "Usage #$counter";
     dotline;
-    warnecho "$i";
+    yellowecho "$i";
     dotline;
     counter=$((counter+1))
   done
@@ -205,11 +210,11 @@ function listcmdhelp()
 
 
 # Find all the usages of a particular command.
-function findcmdhelp()
+function findcmdusage()
 {
   if [[ -z $1 ]]; then
-    errorecho "[ERROR] : Please enter command name as input.";
-    warnecho "[NOTE] : You can run 'cmdhelplist' command to see which which command usages are available."
+    redecho "[ERROR] : Please enter command name as input.";
+    yellowecho "[NOTE] : You can run 'cmdhelplist' command to see which which command usages are available."
     return;
   fi
 
@@ -219,7 +224,7 @@ function findcmdhelp()
   local cmdList=$(sed -n "/<$cmdname>/,/<\/$cmdname>/p" $COMMAND_HELP_FILE);
 
   if [[ -z $cmdList ]]; then
-    errorecho -n "[ERROR] No command list found for command : "; echo $cmdname;
+    redecho -n "[ERROR] No command list found for command : "; echo $cmdname;
     return;
   fi
 
@@ -230,7 +235,7 @@ function findcmdhelp()
 }
 
 # Add the usage for a particular command.
-function addcmdhelp()
+function addcmdusage()
 {
   if [[ -z $1 ]]; then
     echo "[ERROR] : Please enter command name as input.";
@@ -249,15 +254,15 @@ function addcmdhelp()
   local cmdList=$(sed -n "/<$cmdname>/,/<\/$cmdname>/p" $COMMAND_HELP_FILE);
 
   if [[ -z $cmdList ]]; then
-    warnecho "[+] : No command list found for command : $cmdname";
-    successecho "[+] : Creating a new command list..."
+    yellowecho "[+] : No command list found for command : $cmdname";
+    greenecho "[+] : Creating a new command list..."
     echo "" >> $COMMAND_HELP_FILE
     echo "<$cmdname>" >> $COMMAND_HELP_FILE
     echo $cmdVal >> $COMMAND_HELP_FILE;
     echo "</$cmdname>" >> $COMMAND_HELP_FILE;
   else
-    notifyecho "[+] Command List found for : $cmdname"
+    cyanecho "[+] Command List found for : $cmdname"
     sed -i "/<\/$cmdname>/i $cmdVal" $COMMAND_HELP_FILE
-    successecho "[+] Command added!"
+    greenecho "[+] Command added!"
   fi
 }

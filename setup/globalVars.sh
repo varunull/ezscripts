@@ -6,11 +6,6 @@
 # will be using these variables for their operation.
 #
 
-if [[ -z $EZSCRIPT_PATH ]]; then
-    echo "The variable EZSCRIPT_PATH is not set. Please set it to the path of the ezscript project!";
-    return 1;
-fi
-
 # Main project path.
 PROJECT_PATH=$EZSCRIPT_PATH
 
@@ -32,8 +27,8 @@ fi
 #
 # File that stores the command usages stored by the user
 # Used by functions :
-# - addcmdhelp
-# - findcmdhelp
+# - addcmdusage
+# - findcmdusage
 #
 COMMAND_HELP_FILE=${PROJECT_PATH}/database/toolcommands.txt
 
