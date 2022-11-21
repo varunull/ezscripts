@@ -25,7 +25,7 @@ To see all available functions in a quick glance, run `showfunclist` after setup
 
 ### Examples
 #### Using addcmdusage/findcmdusage functions
-Scenario : Your day job requires you to run numerous commands for different tools on a frequent basis. Some of these are so important that you need to retrieve them quickly and also have the ability to tweak them based on your needs. Many linux commands have various flags indicating different usages, and remembering all of their details sometimes becomes tedious. However, it becomes easy if these different usages of the same command can be saved and retrieved easily. These functions do just that. 
+Scenario : Your day job requires you to run numerous command lines for different tools on a frequent basis. Some of these are so important that you need to retrieve them quickly and also have the ability to tweak them based on your needs. Many of these command lines have various flags indicating different usages, and remembering all of their details sometimes becomes tedious. However, it becomes easy if all these can be saved and retrieved easily, which is precisely why these functions were created. 
 
 [Screencast from 2022-11-21 22-07-08.webm](https://user-images.githubusercontent.com/108089086/203112864-fde59876-d88f-43cd-85ce-8d3db7d8844a.webm)
 
