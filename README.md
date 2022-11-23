@@ -15,7 +15,7 @@ ezscripts is a compilation of various bash functions written to speed up the man
 ## Usage
 To see all available functions in a quick glance, run `showfunclist` after setup completes.
 
-![Screenshot from 2022-11-21 21-48-55](https://user-images.githubusercontent.com/108089086/203105372-7a85abcd-917d-44e1-a7f4-3adbdf50795d.png)
+![Screenshot from 2022-11-21 21-48-55-01](https://user-images.githubusercontent.com/108089086/203532304-df698996-ff1d-4327-8618-70e8ab26f442.jpeg)
 
 
 ### For detailed usage of a particular function, use :
